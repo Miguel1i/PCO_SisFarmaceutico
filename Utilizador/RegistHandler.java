@@ -4,8 +4,8 @@ import Industria.Industria;
 /**
  * Classe RegistHandler que cria um utilizador ou indústria
  */
-public class RegistHandler {
 
+public class RegistHandler {
     /**
      * Cria um utilizador
      * @param primeiro_nome primeiro nome do utilizador
@@ -31,16 +31,16 @@ public class RegistHandler {
      * Cria uma indústria
      * @param primeiro_nome primeiro nome da indústria
      * @param password password da indústria
-     * @param email email da indústria
      * @param papel papel da indústria
      * @param tipo tipo de indústria
      * @param contacto contacto da indústria
      * @return indústria criada
      */
-    public Industria registarIndustria(String primeiro_nome, String password, String email, String papel, String tipo, String contacto){
-        Industria i = new Industria(primeiro_nome, email,password, papel, tipo);
+    public Industria registarIndustria(String primeiro_nome, String password, String papel, String tipo, int contacto){
+        Industria i = new Industria(primeiro_nome,password, papel, tipo);
         i.setContacto(contacto);
         return i;
     }
+
 
 }

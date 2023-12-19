@@ -7,24 +7,23 @@ import java.util.HashMap;
  * Classe Industria que herda de Utilizador e representa uma industria farmaceutica.
  */
 public class Industria extends Utilizador {
-    private String contacto;
+    private int contacto;
     private HashMap<String, Medicamento> medicamentos;
 
     /**
      * Construtor da classe Industria
      * @param primeiro_nome primeiro nome da industria
-     * @param email email da industria
      * @param password password da industria
      * @param papel papel da industria
      * @param tipo tipo da industria
      */
-    public Industria(String primeiro_nome, String email, String password, String papel, String tipo) {
+    public Industria(String primeiro_nome, String password, String papel, String tipo) {
         setPrimeiro_nome(primeiro_nome);
-        setEmail(email);
+        setEmail(primeiro_nome+"@"+primeiro_nome+".com");
         setPassword(password);
         setPapel(papel);
         setTipo(tipo);
-        this.contacto = "";
+        this.contacto = 0;
         this.medicamentos = new HashMap<>();
     }
 
@@ -32,7 +31,7 @@ public class Industria extends Utilizador {
      * Getter do contacto da industria
      * @return contacto
      */
-    public String getContacto() {
+    public int getContacto() {
         return contacto;
     }
 
@@ -40,7 +39,7 @@ public class Industria extends Utilizador {
      * Setter do contacto da industria
      * @param contacto contacto da industria
      */
-    public void setContacto(String contacto) {
+    public void setContacto(int contacto) {
         this.contacto = contacto;
     }
 
@@ -58,5 +57,13 @@ public class Industria extends Utilizador {
      */
     public void setMedicamentos(HashMap<String, Medicamento> medicamentos) {
         this.medicamentos = medicamentos;
+   }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "contacto=" + contacto +
+                ", medicamentos=" + medicamentos +
+                '}';
     }
 }

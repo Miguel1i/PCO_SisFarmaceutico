@@ -1,4 +1,5 @@
 package InteracaoAlimentar;
+
 import SubstanciaAtiva.SubstanciaAtiva;
 
 /**
@@ -8,17 +9,20 @@ public class InteracaoHandler {
 
     /**
      * Cria uma interação alimentar
+     *
      * @param substanciaAtiva substância ativa
-     * @param explicacao explicação
-     * @param alimento alimento
-     * @param referencia referência bibliográfica
+     * @param explicacao      explicação
+     * @param alimento        alimento
+     * @param referencia      referência bibliográfica
      * @return interação alimentar criada
      */
-    public InteracaoAlimentar criarInteracaoAlimentar(SubstanciaAtiva substanciaAtiva, String explicacao,String alimento, String referencia ){
+    public InteracaoAlimentar criarInteracaoAlimentar(SubstanciaAtiva substanciaAtiva, String explicacao, String alimento,String efeito, int nivelEfeito, String referencia ){
         InteracaoAlimentar ia = new InteracaoAlimentar();
         ia.setSubstanciaAtiva(substanciaAtiva);
         ia.setExplicacao(explicacao);
         ia.setAlimento(alimento);
+        ia.setEfeito(efeito);
+        ia.setNivel_efeito(nivelEfeito);
         ia.setReferencia_bibliografica(referencia);
         return ia;
     }

@@ -8,6 +8,7 @@ public class InteracaoAlimentar {
 
     private SubstanciaAtiva substanciaAtiva;
     private String explicacao;
+    private int nivel_efeito;
     private String alimento;
     private String efeito;
     private String referencia_bibliografica;
@@ -21,6 +22,7 @@ public class InteracaoAlimentar {
         this.explicacao = "";
         this.alimento = "";
         this.efeito = "";
+        this.nivel_efeito = 0;
         this.referencia_bibliografica = "";
     }
 
@@ -64,6 +66,14 @@ public class InteracaoAlimentar {
         this.referencia_bibliografica = referencia_bibliografica;
     }
 
+    public int getNivel_efeito() {
+        return nivel_efeito;
+    }
+
+    public void setNivel_efeito(int nivel_efeito) {
+        this.nivel_efeito = nivel_efeito;
+    }
+
     /**
      * Getter da substância ativa
      * @return substância ativa
@@ -86,5 +96,24 @@ public class InteracaoAlimentar {
      */
     public String getEfeito() {
         return efeito;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        boolean s = substanciaAtiva.equals(((InteracaoAlimentar) o).substanciaAtiva);
+        boolean efect = efeito.equals(((InteracaoAlimentar) o).efeito);
+        boolean food = alimento.equals(((InteracaoAlimentar) o).alimento);
+        return food && efect && s;
+    }
+
+    @Override
+    public String toString() {
+        return  "InteracaoAlimentar{" +
+                "substanciaAtiva=" + substanciaAtiva +
+                ", alimento='" + alimento + '\'' +
+                ", efeito='" + efeito + '\'' +
+                '}';
     }
 }

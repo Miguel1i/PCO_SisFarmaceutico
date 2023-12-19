@@ -1,6 +1,8 @@
 package SubstanciaAtiva;
 
 
+import java.util.Objects;
+
 /**
  * Classe que representa uma substância ativa
  */
@@ -38,4 +40,20 @@ public class SubstanciaAtiva {
         this.nome = nome;
     }
 
+    @Override
+    public String toString() {
+        return nome;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        return nome.equals(((SubstanciaAtiva) o).nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }
