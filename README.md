@@ -1,4 +1,4 @@
-# Programação Orientadada a Objetos - Sistema Farmacéutico
+# Programação Orientadada a Objetos - Sistema Farmacêutico
 
 # Visão do projeto e caso de negócio
 
