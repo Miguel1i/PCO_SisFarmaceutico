@@ -11,6 +11,7 @@ import Utilizador.Utilizador;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
+import javax.annotation.processing.SupportedSourceVersion;
 import javax.swing.text.html.parser.Parser;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,7 +28,6 @@ public class Sistema {
     private HashMap<String, Industria> industrias;
     private HashMap<String, Utilizador> utilizadores;
     private final String[] tipos_utilizador = {"Industria", "Farmaceutico", "Administrador"};
-    private ArrayList<String> formas;
     private Utilizador utilizador_atual;
     private ArrayList<String> alimentos;
     private MedicamentoHandler medicamento_handler;
@@ -42,7 +42,6 @@ public class Sistema {
         this.interacoes_alimentares = new ArrayList<InteracaoAlimentar>();
         this.industrias = new HashMap<>();
         this.utilizadores = new HashMap<>();
-        this.formas = new ArrayList<>();
         this.alimentos = new ArrayList<>();
         this.medicamento_handler = new MedicamentoHandler();
         this.substancia_ativa_handler = new SubstanciaHandler();
@@ -57,7 +56,6 @@ public class Sistema {
     public void startup() {
         Gson gson = new Gson();
         try {
-
             FileReader fileReader = new FileReader("Sistema/dataset.json");
             JsonObject jsonObject = gson.fromJson(fileReader, JsonObject.class);
             JsonArray drugsArray = jsonObject.getAsJsonArray("drugs");
@@ -66,7 +64,6 @@ public class Sistema {
             JsonArray foodsArray = jsonObject.getAsJsonArray("foodTypes");
             JsonArray laboratories = jsonObject.getAsJsonArray("laboratories");
             fileReader.close();
-
             // Alimentos
             for (int i = 0; i < foodsArray.size(); i++) {
                 String alimento_string = foodsArray.get(i).getAsJsonObject().get("Type").getAsString();
@@ -74,18 +71,11 @@ public class Sistema {
                     alimentos.add(alimento_string);
                 }
             }
-
-            for (int i = 0; i < laboratories.size(); i++) {
-                String industria_nome = laboratories.get(i).getAsJsonObject().get("Name").getAsString();
-                String industria_contacto = laboratories.get(i).getAsJsonObject().get("Surveillance").getAsString();
-            }
-
             // Substâncias Ativas
             for (int i = 0; i < substancesArray.size() ; i++) {
                 String substance_string = substancesArray.get(i).getAsJsonObject().get("Substance").getAsString();
                 adicionarSubstanciaAtiva(substance_string);
             }
-
             // Interações Alimentares
             for (int i = 0; i < interactionsArray.size(); i++) {
                 String referencia = interactionsArray.get(i).getAsJsonObject().get("Bibliography").getAsString();
@@ -106,7 +96,6 @@ public class Sistema {
                 }
                 adicionarInteracaoAlimentar(s, explicacao, alimento, efeito, level, referencia);
             }
-
             // Indústrias
             for (int i = 0; i < laboratories.size(); i++) {
                 int contato;
@@ -121,14 +110,25 @@ public class Sistema {
                     industrias.put(name, in);
                 }
             }
-           
-
             // Medicamentos
             for (int i = 0; i < drugsArray.size(); i++) {
-                continue;
+                String dosagem = drugsArray.get(i).getAsJsonObject().get("Dosage").getAsString();
+                String forma = drugsArray.get(i).getAsJsonObject().get("Form").getAsString();
+                String laboratorio = drugsArray.get(i).getAsJsonObject().get("Laboratory").getAsString();
+                String nome = drugsArray.get(i).getAsJsonObject().get("Name").getAsString();
+                String substancia = drugsArray.get(i).getAsJsonObject().get("Substances").getAsString();
+
+                SubstanciaAtiva s;
+                if (!verificaSubstancia(substancia)) {
+                    s = substancia_ativa_handler.criarSubstancia(substancia);
+                    substancias_ativas.put(substancia, s);
+                } else {
+                    s = substancia_ativa_handler.criarSubstancia(substancia);
+                }
+                ArrayList<SubstanciaAtiva> s_lista = new ArrayList<>();
+                s_lista.add(s);
+                adicionarMedicamento(nome, forma, dosagem, s_lista, laboratorio);
             }
-
-
         } catch (FileNotFoundException ignored) {
             System.out.printf("File %s does not exist\n","dataset.json");
             System.exit(1);
@@ -138,8 +138,6 @@ public class Sistema {
         }catch (IOException ignored){
             System.out.println("ok");
         }
-
-
     }
 
     public void shutdown() {
@@ -157,19 +155,44 @@ public class Sistema {
     }
 
     public void listarMedicamentos() {
-
     }
 
     public void pesquisarInteracoes(String nome_medicamento) {
-
+        for (Medicamento m: medicamentos.values()) {
+            if (m.getNome().equals(nome_medicamento)){
+                ArrayList<SubstanciaAtiva> s = m.getSubstanciaAtivas();
+                for (InteracaoAlimentar ia: interacoes_alimentares){
+                    if (s.contains(ia.getSubstanciaAtiva())){
+                        System.out.println(s.contains(ia.getSubstanciaAtiva()));
+                        System.out.println(ia);
+                    }
+                }
+            }
+        }
     }
 
-    public void pesquisarContacto(String nome_medicamento) {
-
+    public Integer pesquisarContacto(String nome_medicamento) {
+        for (Map.Entry<String, Industria> industria: industrias.entrySet()) {
+            if (industria.getValue().getMedicamentos().containsKey(nome_medicamento)){
+                return industria.getValue().getContacto();
+            }
+        }
+        return 0;
     }
 
-    public String adicionarMedicamento(String nome, String forma, float dosagem, ArrayList<String> substancias_ativas) {
-        return "";
+    public String adicionarMedicamento(String nome, String forma, String dosagem, ArrayList<SubstanciaAtiva> s_lista, String laboratorio) {
+        if (!verificaMedicamento(nome+dosagem)) {
+            Medicamento m = medicamento_handler.criarMedicamento(nome, forma, dosagem, s_lista);
+            medicamentos.put(nome + dosagem, m);
+            if (industrias.containsKey(laboratorio)) {
+                Industria in = industrias.get(laboratorio);
+                in.setMedicamentos(m);
+                industrias.put(in.getPrimeiro_nome(), in);
+            }
+            return "Medicamento adicionado com sucesso";
+        } else{
+            return "Medicamento já existe";
+        }
     }
 
     public String adicionarInteracaoAlimentar(SubstanciaAtiva substancia_ativa, String explicacao, String alimento, String efeito, int nivelEfeito, String referencia) {

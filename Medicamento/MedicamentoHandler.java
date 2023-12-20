@@ -16,12 +16,14 @@ public class MedicamentoHandler {
      * @param substanciaAtivas lista de substâncias ativas do medicamento
      * @return medicamento criado
      */
-    public Medicamento criarMedicamento(String nome, String forma, float dosagem, ArrayList<SubstanciaAtiva> substanciaAtivas){
+    public Medicamento criarMedicamento(String nome, String forma, String dosagem, ArrayList<SubstanciaAtiva> substanciaAtivas){
         Medicamento m = new Medicamento();
         m.setNome(nome);
         m.setForma(forma);
         m.setDosagem(dosagem);
-        m.setSubstanciaAtivas(substanciaAtivas);
+        for (SubstanciaAtiva s: substanciaAtivas){
+                m.addSubstancia(s);
+        }
         return m;
     }
 

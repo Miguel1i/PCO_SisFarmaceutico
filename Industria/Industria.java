@@ -53,11 +53,12 @@ public class Industria extends Utilizador {
 
     /**
      * Setter dos medicamentos da industria
-     * @param medicamentos medicamentos da industria
+     * @param medicamento medicamento da industria
      */
-    public void setMedicamentos(HashMap<String, Medicamento> medicamentos) {
-        this.medicamentos = medicamentos;
+    public void setMedicamentos(Medicamento medicamento) {
+        this.medicamentos.put(medicamento.getNome(), medicamento);
    }
+
 
     @Override
     public String toString() {

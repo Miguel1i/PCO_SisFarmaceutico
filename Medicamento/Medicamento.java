@@ -10,7 +10,7 @@ public class Medicamento {
 
     private String nome;
     private String forma;
-    private float dosagem;
+    private String dosagem;
     private ArrayList<SubstanciaAtiva> substanciaAtivas;
 
 
@@ -20,7 +20,8 @@ public class Medicamento {
     public Medicamento(){
         nome = "";
         forma = "";
-        dosagem = 0;
+        dosagem = "";
+        substanciaAtivas = new ArrayList<>();
     }
 
     /**
@@ -39,12 +40,15 @@ public class Medicamento {
         this.forma = forma;
     }
 
+    public String getNome() {
+        return nome;
+    }
 
     /**
      * Setter da dosagem do medicamento
      * @param dosagem dosagem do medicamento
      */
-    public void setDosagem(float dosagem) {
+    public void setDosagem(String dosagem) {
         this.dosagem = dosagem;
     }
 
@@ -60,7 +64,23 @@ public class Medicamento {
      * Adiciona uma substância ativa à lista de substâncias ativas do medicamento
      * @param substanciaAtiva substância ativa a adicionar
      */
-    public void addSusbtancia(SubstanciaAtiva substanciaAtiva){
-        this.substanciaAtivas.add(substanciaAtiva);
+    public void addSubstancia(SubstanciaAtiva substanciaAtiva){
+        if (!substanciaAtivas.contains(substanciaAtiva)){
+            this.substanciaAtivas.add(substanciaAtiva);
+        }
+    }
+
+    public ArrayList<SubstanciaAtiva> getSubstanciaAtivas() {
+        return substanciaAtivas;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "nome='" + nome + '\'' +
+                ", forma='" + forma + '\'' +
+                ", dosagem='" + dosagem + '\'' +
+                ", substanciaAtivas=" + substanciaAtivas +
+                '}';
     }
 }
