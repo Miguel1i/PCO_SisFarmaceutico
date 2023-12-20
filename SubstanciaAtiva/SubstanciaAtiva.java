@@ -52,8 +52,4 @@ public class SubstanciaAtiva {
         return nome.equals(((SubstanciaAtiva) o).nome);
     }
 
-    @Override
-    public int hashCode() {
-        return 0;
-    }
 }

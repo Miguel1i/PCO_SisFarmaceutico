@@ -53,14 +53,6 @@ public class Medicamento {
     }
 
     /**
-     * Setter da lista de substâncias ativas do medicamento
-     * @param new_list lista de substâncias ativas do medicamento
-     */
-    public void setSubstanciaAtivas(ArrayList<SubstanciaAtiva> new_list) {
-        this.substanciaAtivas = new_list;
-    }
-
-    /**
      * Adiciona uma substância ativa à lista de substâncias ativas do medicamento
      * @param substanciaAtiva substância ativa a adicionar
      */
@@ -76,11 +68,10 @@ public class Medicamento {
 
     @Override
     public String toString() {
-        return "{" +
-                "nome='" + nome + '\'' +
-                ", forma='" + forma + '\'' +
-                ", dosagem='" + dosagem + '\'' +
-                ", substanciaAtivas=" + substanciaAtivas +
-                '}';
+        return
+                "Nome: " + nome + '\n' +
+                "   Forma: " + forma + '\n' +
+                "   Dosagem: " + dosagem + '\n' +
+                "   Substâncias Ativas: " + substanciaAtivas + "\n";
     }
 }

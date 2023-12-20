@@ -16,8 +16,6 @@ public class Utilizador {
 
     private String papel;
 
-    private String tipo;
-
     /**
      * Construtor default da classe Utilizador
      */
@@ -27,7 +25,6 @@ public class Utilizador {
         this.password = "";
         this.email = "";
         this.papel = "";
-        this.tipo = "";
     }
 
     /**
@@ -56,11 +53,11 @@ public class Utilizador {
     }
 
     /**
-     * Getter do tipo de Utilizador
-     * @return tipo
+     * Getter do papel de Utilizador
+     * @return papel
      */
-    public String getTipo() {
-        return tipo;
+    public String getPapel() {
+        return papel;
     }
 
     /**
@@ -104,11 +101,4 @@ public class Utilizador {
         this.papel = papel;
     }
 
-    /**
-     * Setter do tipo de Utilizador
-     * @param tipo, Tipo de utilizador : Administrador, Farmaceutico, Industria
-     */
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
 }

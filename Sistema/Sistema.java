@@ -9,10 +9,6 @@ import SubstanciaAtiva.SubstanciaAtiva;
 import SubstanciaAtiva.SubstanciaHandler;
 import Utilizador.Utilizador;
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-
-import javax.annotation.processing.SupportedSourceVersion;
-import javax.swing.text.html.parser.Parser;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -27,7 +23,7 @@ public class Sistema {
     private ArrayList<InteracaoAlimentar> interacoes_alimentares;
     private HashMap<String, Industria> industrias;
     private HashMap<String, Utilizador> utilizadores;
-    private final String[] tipos_utilizador = {"Industria", "Farmaceutico", "Administrador"};
+    private final String[] papel_utilizador = {"Industria", "Farmaceutico", "Administrador"};
     private Utilizador utilizador_atual;
     private ArrayList<String> alimentos;
     private MedicamentoHandler medicamento_handler;
@@ -88,7 +84,7 @@ public class Sistema {
                     alimentos.add(alimento);
                 }
                 SubstanciaAtiva s;
-                if (!verificaSubstancia(substancia_nome)) {
+                if (!verificaSubstancia(substancia_nome) && !substancia_nome.isEmpty()) {
                     s = substancia_ativa_handler.criarSubstancia(substancia_nome);
                     substancias_ativas.put(substancia_nome, s);
                 } else {
@@ -98,14 +94,14 @@ public class Sistema {
             }
             // Indústrias
             for (int i = 0; i < laboratories.size(); i++) {
-                int contato;
+                int contacto;
                 String name = laboratories.get(i).getAsJsonObject().get("Name").getAsString();
                 if (laboratories.get(i).getAsJsonObject().get("Surveillance").getAsString().equals("")){
-                    contato = 0;
+                    contacto = 0;
                 }else {
-                    contato = laboratories.get(i).getAsJsonObject().get("Surveillance").getAsInt();
+                    contacto = laboratories.get(i).getAsJsonObject().get("Surveillance").getAsInt();
                 }
-                Industria in = regist_handler.registarIndustria(name, "", "", "Industria", contato);
+                Industria in = regist_handler.registarIndustria(name, "", "Industria",contacto);
                 if(!industrias.containsKey(name)){
                     industrias.put(name, in);
                 }
@@ -119,10 +115,10 @@ public class Sistema {
                 String substancia = drugsArray.get(i).getAsJsonObject().get("Substances").getAsString();
 
                 SubstanciaAtiva s;
-                if (!verificaSubstancia(substancia)) {
+                if (!verificaSubstancia(substancia) && !substancia.isEmpty()) {
                     s = substancia_ativa_handler.criarSubstancia(substancia);
                     substancias_ativas.put(substancia, s);
-                } else {
+                } else{
                     s = substancia_ativa_handler.criarSubstancia(substancia);
                 }
                 ArrayList<SubstanciaAtiva> s_lista = new ArrayList<>();
@@ -136,7 +132,8 @@ public class Sistema {
             System.out.println("Invalid file");
             System.exit(2);
         }catch (IOException ignored){
-            System.out.println("ok");
+            System.out.println("IO Exception error");
+            System.exit(3);
         }
     }
 
@@ -144,17 +141,24 @@ public class Sistema {
 
     }
 
-    public void listarInteracoesAlimentares() {
-
-    }
-
-    public void listarSubstanciasAtivas(int max) {
+    public void listarInteracoesAlimentares(int max) {
         for (int i = max - 10; i < max; i++) {
-            System.out.println(substancias_ativas.values());
+            System.out.println(i+1 + ": " + interacoes_alimentares.get(i));
         }
     }
 
-    public void listarMedicamentos() {
+    public void listarSubstanciasAtivas(int max) {
+       ArrayList<SubstanciaAtiva> substancias = new ArrayList<>(substancias_ativas.values());
+       for (int i = max - 10; i < max; i++) {
+           System.out.println(i+1 + ": " + substancias.get(i).getNome());
+       }
+    }
+
+    public void listarMedicamentos(int max) {
+        ArrayList<Medicamento> m = new ArrayList<>(medicamentos.values());
+        for (int i = max - 10; i < max; i++) {
+            System.out.println(i + 1 + ": " + m.get(i));
+        }
     }
 
     public void pesquisarInteracoes(String nome_medicamento) {
@@ -163,7 +167,6 @@ public class Sistema {
                 ArrayList<SubstanciaAtiva> s = m.getSubstanciaAtivas();
                 for (InteracaoAlimentar ia: interacoes_alimentares){
                     if (s.contains(ia.getSubstanciaAtiva())){
-                        System.out.println(s.contains(ia.getSubstanciaAtiva()));
                         System.out.println(ia);
                     }
                 }
@@ -171,13 +174,13 @@ public class Sistema {
         }
     }
 
-    public Integer pesquisarContacto(String nome_medicamento) {
+    public Industria pesquisarContacto(String nome_medicamento) {
         for (Map.Entry<String, Industria> industria: industrias.entrySet()) {
             if (industria.getValue().getMedicamentos().containsKey(nome_medicamento)){
-                return industria.getValue().getContacto();
+                return industria.getValue();
             }
         }
-        return 0;
+        return null;
     }
 
     public String adicionarMedicamento(String nome, String forma, String dosagem, ArrayList<SubstanciaAtiva> s_lista, String laboratorio) {
@@ -195,8 +198,8 @@ public class Sistema {
         }
     }
 
-    public String adicionarInteracaoAlimentar(SubstanciaAtiva substancia_ativa, String explicacao, String alimento, String efeito, int nivelEfeito, String referencia) {
-        InteracaoAlimentar ia = interacao_alimentar_handler.criarInteracaoAlimentar(substancia_ativa, explicacao, alimento, efeito, nivelEfeito, referencia);
+    public String adicionarInteracaoAlimentar(SubstanciaAtiva substancia_ativa, String explicacao, String alimento, String efeito, int nivel_efeito, String referencia) {
+        InteracaoAlimentar ia = interacao_alimentar_handler.criarInteracaoAlimentar(substancia_ativa, explicacao, alimento, efeito, nivel_efeito, referencia);
         if (!verificaInteracao(ia)){
             interacoes_alimentares.add(ia);
             return "Interação alimentar adicionada com sucesso";

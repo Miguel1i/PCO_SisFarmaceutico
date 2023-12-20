@@ -110,10 +110,8 @@ public class InteracaoAlimentar {
 
     @Override
     public String toString() {
-        return  "InteracaoAlimentar{" +
-                "substanciaAtiva=" + substanciaAtiva +
-                ", alimento='" + alimento + '\'' +
-                ", efeito='" + efeito + '\'' +
-                '}';
+        return
+                "Substância Ativa: " + substanciaAtiva + '\n' +
+                "   Alimento: " + alimento + '\n' +"   Efeito: " + efeito + '\n';
     }
 }

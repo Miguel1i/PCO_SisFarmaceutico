@@ -15,14 +15,12 @@ public class Industria extends Utilizador {
      * @param primeiro_nome primeiro nome da industria
      * @param password password da industria
      * @param papel papel da industria
-     * @param tipo tipo da industria
      */
-    public Industria(String primeiro_nome, String password, String papel, String tipo) {
+    public Industria(String primeiro_nome, String password, String papel) {
         setPrimeiro_nome(primeiro_nome);
         setEmail(primeiro_nome+"@"+primeiro_nome+".com");
         setPassword(password);
         setPapel(papel);
-        setTipo(tipo);
         this.contacto = 0;
         this.medicamentos = new HashMap<>();
     }
@@ -62,9 +60,8 @@ public class Industria extends Utilizador {
 
     @Override
     public String toString() {
-        return "{" +
-                "contacto=" + contacto +
-                ", medicamentos=" + medicamentos +
-                '}';
+        return  "Nome:" + getPrimeiro_nome()+ "\n"+
+                "email:" + getEmail() + "\n" +
+                "contacto:" + contacto + "\n";
     }
 }
