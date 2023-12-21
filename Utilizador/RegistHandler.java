@@ -4,7 +4,6 @@ import Industria.Industria;
 /**
  * Classe RegistHandler que cria um utilizador ou indústria
  */
-
 public class RegistHandler {
     /**
      * Cria um utilizador
@@ -38,6 +37,4 @@ public class RegistHandler {
         i.setContacto(contacto);
         return i;
     }
-
-
 }

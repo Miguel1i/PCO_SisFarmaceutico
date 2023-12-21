@@ -9,7 +9,6 @@ public class InteracaoHandler {
 
     /**
      * Cria uma interação alimentar
-     *
      * @param substanciaAtiva substância ativa
      * @param explicacao      explicação
      * @param alimento        alimento
@@ -26,5 +25,4 @@ public class InteracaoHandler {
         ia.setReferencia_bibliografica(referencia);
         return ia;
     }
-
 }

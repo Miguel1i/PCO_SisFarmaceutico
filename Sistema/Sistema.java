@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Classe que representa o sistema farmaceutico.
+ */
 public class Sistema {
     private TreeMap<String, SubstanciaAtiva> substancias_ativas;
     private TreeMap<String, Medicamento> medicamentos;
@@ -32,6 +35,9 @@ public class Sistema {
     private RegistHandler regist_handler;
     private final HashMap<Integer, String> niveis = new HashMap<>();
 
+    /**
+     * Construtor default da classe sistema
+     */
     public Sistema() {
         this.substancias_ativas = new TreeMap<>();
         this.medicamentos = new TreeMap<>();
@@ -46,9 +52,23 @@ public class Sistema {
         this.niveis.put(1, "Fraco"); this.niveis.put(2, "moderado"); this.niveis.put(3, "Forte");
     }
 
+    /**
+     * Getter para retornar o utilizador atual do sistema.
+     * @return utilizador_atual
+     */
     public Utilizador getUtilizador_atual() {
         return utilizador_atual;
     }
+
+    /**
+     * Startup do sistema
+     * Recebe do ficheiro dataset.json os dados para o sistema como substâncias ativas, interações alimentares, medicamentos, alimentos e indústrias.
+     * e adiciona-os ao sistema quando o sistema é iniciado.
+     * @exception FileNotFoundException, caso o ficheiro não exista.
+     * @exception IllegalStateException, caso o ficheiro não esteja no formato correto.
+     * @exception JsonSyntaxException, caso o ficheiro não esteja no formato correto.
+     * @exception IOException, caso haja um erro de IO.
+     */
     public void startup() {
         Gson gson = new Gson();
         try {
@@ -123,8 +143,10 @@ public class Sistema {
                 }
                 ArrayList<SubstanciaAtiva> s_lista = new ArrayList<>();
                 s_lista.add(s);
+
                 adicionarMedicamento(nome, forma, dosagem, s_lista, laboratorio);
             }
+
         } catch (FileNotFoundException ignored) {
             System.out.printf("File %s does not exist\n","dataset.json");
             System.exit(1);
@@ -141,12 +163,20 @@ public class Sistema {
 
     }
 
+    /**
+     * Metodo para listar interações alimentares de 10 em 10
+     * @param max, é incrementado ao max + 10
+     */
     public void listarInteracoesAlimentares(int max) {
         for (int i = max - 10; i < max; i++) {
             System.out.println(i+1 + ": " + interacoes_alimentares.get(i));
         }
     }
 
+    /**
+     * Metodo para listar substâncias ativas de 10 em 10
+     * @param max, é incrementado ao max + 10
+     */
     public void listarSubstanciasAtivas(int max) {
        ArrayList<SubstanciaAtiva> substancias = new ArrayList<>(substancias_ativas.values());
        for (int i = max - 10; i < max; i++) {
@@ -154,6 +184,10 @@ public class Sistema {
        }
     }
 
+    /**
+     * Metodo para listar medicamento de 10 em 10
+     * @param max, é imcrementado ao max + 10
+     */
     public void listarMedicamentos(int max) {
         ArrayList<Medicamento> m = new ArrayList<>(medicamentos.values());
         for (int i = max - 10; i < max; i++) {
@@ -161,6 +195,10 @@ public class Sistema {
         }
     }
 
+    /**
+     * Método para pesquisar interações alimentares dado um nome do medicamento.
+     * @param nome_medicamento nome do medicamento
+     */
     public void pesquisarInteracoes(String nome_medicamento) {
         for (Medicamento m: medicamentos.values()) {
             if (m.getNome().equals(nome_medicamento)){
@@ -174,6 +212,11 @@ public class Sistema {
         }
     }
 
+    /**
+     * Metodo para pesquisar um contacto através de um medicamento
+     * @param nome_medicamento nome do medicamento.
+     * @return industria
+     */
     public Industria pesquisarContacto(String nome_medicamento) {
         for (Map.Entry<String, Industria> industria: industrias.entrySet()) {
             if (industria.getValue().getMedicamentos().containsKey(nome_medicamento)){
@@ -183,6 +226,15 @@ public class Sistema {
         return null;
     }
 
+    /**
+     * Método para adicionar um medicamento ao sistema
+     * @param nome nome do medicamento
+     * @param forma forma do medicamento
+     * @param dosagem dosagem do medicamento
+     * @param s_lista lista de substâncias ativas do medicamento
+     * @param laboratorio laboratório do medicamento
+     * @return String com a informação se o medicamento foi adicionado com sucesso ou não
+     */
     public String adicionarMedicamento(String nome, String forma, String dosagem, ArrayList<SubstanciaAtiva> s_lista, String laboratorio) {
         if (!verificaMedicamento(nome+dosagem)) {
             Medicamento m = medicamento_handler.criarMedicamento(nome, forma, dosagem, s_lista);
@@ -198,16 +250,31 @@ public class Sistema {
         }
     }
 
+    /**
+     * Método para adicionar uma interação alimentar ao sistema
+     * @param substancia_ativa substância ativa
+     * @param explicacao explicação da interação alimentar
+     * @param alimento alimento envolvido na interação alimentar
+     * @param efeito efeito provocado pela interação alimentar
+     * @param nivel_efeito nível do efeito provocado pela interação alimentar
+     * @param referencia referência bibliográfica
+     * @return String com a informação se a interação alimentar foi adicionada com sucesso ou não
+     */
     public String adicionarInteracaoAlimentar(SubstanciaAtiva substancia_ativa, String explicacao, String alimento, String efeito, int nivel_efeito, String referencia) {
         InteracaoAlimentar ia = interacao_alimentar_handler.criarInteracaoAlimentar(substancia_ativa, explicacao, alimento, efeito, nivel_efeito, referencia);
         if (!verificaInteracao(ia)){
             interacoes_alimentares.add(ia);
             return "Interação alimentar adicionada com sucesso";
-        }else{
+        }else {
             return "A interação alimentar já existe";
         }
     }
 
+    /**
+     * Metodo para adicionar substância ativa.
+     * @param nome, nome da substância
+     * @return String, confirmação caso seja adicionada, ou de já existir.
+     */
     public String adicionarSubstanciaAtiva(String nome) {
         if (!verificaSubstancia(nome)){
             SubstanciaAtiva s = substancia_ativa_handler.criarSubstancia(nome);
@@ -226,14 +293,29 @@ public class Sistema {
 
     }
 
+    /**
+     * Método para verificar se um medicamento existe no sistema ou não
+     * @param nome_medicamento nome do medicamento
+     * @return true se o medicamento existir, false caso contrário
+     */
     public boolean verificaMedicamento(String nome_medicamento) {
         return medicamentos.containsKey(nome_medicamento);
     }
 
+    /**
+     * Método para verificar se uma substância ativa existe no sistema ou não
+     * @param nome_substancia nome da substância ativa
+     * @return true se a substância ativa existir, false caso contrário
+     */
     public boolean verificaSubstancia(String nome_substancia) {
         return substancias_ativas.containsKey(nome_substancia);
     }
 
+    /**
+     * Método para verificar se uma interação alimentar existe no sistema ou não
+     * @param ia interação alimentar
+     * @return true se a interação alimentar existir, false caso contrário
+     */
     public boolean verificaInteracao(InteracaoAlimentar ia) {
         for (InteracaoAlimentar interacaoAlimentar: interacoes_alimentares) {
             if (interacaoAlimentar.equals(ia)) {

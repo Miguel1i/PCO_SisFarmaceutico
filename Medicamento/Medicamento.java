@@ -40,6 +40,10 @@ public class Medicamento {
         this.forma = forma;
     }
 
+    /**
+     * Getter do nome do medicamento
+     * @return nome do medicamento
+     */
     public String getNome() {
         return nome;
     }
@@ -62,10 +66,18 @@ public class Medicamento {
         }
     }
 
+    /**
+     * Getter da lista de substancias ativas do medicamento
+     * @return lista de substâncias ativas do medicamento
+     */
     public ArrayList<SubstanciaAtiva> getSubstanciaAtivas() {
         return substanciaAtivas;
     }
 
+    /**
+     * Método toString da classe Medicamento
+     * @return nome, forma, dosagem e substâncias ativas do medicamento
+     */
     @Override
     public String toString() {
         return

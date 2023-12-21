@@ -57,7 +57,10 @@ public class Industria extends Utilizador {
         this.medicamentos.put(medicamento.getNome(), medicamento);
    }
 
-
+    /**
+     * Método que retorna uma String com a informação da industria
+     * @return String com a informação da industria
+     */
     @Override
     public String toString() {
         return  "Nome:" + getPrimeiro_nome()+ "\n"+

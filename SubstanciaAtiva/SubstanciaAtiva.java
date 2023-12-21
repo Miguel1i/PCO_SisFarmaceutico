@@ -1,8 +1,5 @@
 package SubstanciaAtiva;
 
-
-import java.util.Objects;
-
 /**
  * Classe que representa uma substância ativa
  */
@@ -14,14 +11,6 @@ public class SubstanciaAtiva {
      */
     public SubstanciaAtiva() {
         this.nome = "";
-    }
-
-    /**
-     * Construtor da classe SubstanciaAtiva
-     * @param nome, nome da substância ativa
-     */
-    public SubstanciaAtiva(String nome) {
-        this.nome = nome;
     }
 
     /**
@@ -40,16 +29,23 @@ public class SubstanciaAtiva {
         this.nome = nome;
     }
 
+    /**
+     * Método toString da classe SubstanciaAtiva
+     * @return nome da substância ativa
+     */
     @Override
     public String toString() {
         return nome;
     }
 
+    /**
+     * Método que compara duas substâncias ativas
+     * @return true se as substâncias ativas forem iguais, false caso contrário
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         return nome.equals(((SubstanciaAtiva) o).nome);
     }
-
 }

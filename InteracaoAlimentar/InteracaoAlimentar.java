@@ -98,6 +98,10 @@ public class InteracaoAlimentar {
         return efeito;
     }
 
+    /**
+     * Verifica se uma interação alimentar é igual a outra
+     * @return true se as interações alimentares forem iguais, false caso contrário
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,6 +112,10 @@ public class InteracaoAlimentar {
         return food && efect && s;
     }
 
+    /**
+     * Método toString da classe InteracaoAlimentar
+     * @return String com a informação da interação alimentar
+     */
     @Override
     public String toString() {
         return

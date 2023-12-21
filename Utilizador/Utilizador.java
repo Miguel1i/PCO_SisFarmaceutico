@@ -1,10 +1,8 @@
 package Utilizador;
 
-
 /**
  * Classe que representa um Utilizador
  */
-
 public class Utilizador {
 
     private String primeiro_nome;
@@ -100,5 +98,4 @@ public class Utilizador {
     public void setPapel(String papel) {
         this.papel = papel;
     }
-
 }
